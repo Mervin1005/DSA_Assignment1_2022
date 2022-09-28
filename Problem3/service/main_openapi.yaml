@@ -1,0 +1,97 @@
+openapi: 3.0.1
+info:
+  title: Main Openapi Yaml
+  version: 0.1.0
+servers:
+- url: "{server}:{port}/"
+  variables:
+    server:
+      default: http://localhost
+    port:
+      default: "4000"
+paths:
+  /create:
+    post:
+      operationId: postCreate
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+  /update:
+    put:
+      operationId: putUpdate
+      responses:
+        "202":
+          description: Accepted
+  /lookup:
+    get:
+      operationId: getLookup
+      parameters:
+      - name: studentNumber
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+  /all:
+    get:
+      operationId: getAll
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+  /delete:
+    delete:
+      operationId: deleteDelete
+      parameters:
+      - name: studentNumber
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  schemas:
+    Student:
+      required:
+      - address
+      - courses
+      - email
+      - name
+      - studentNumber
+      type: object
+      properties:
+        studentNumber:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        address:
+          type: string
+        courses:
+          type: array
+          items:
+            type: string
