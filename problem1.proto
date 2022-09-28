@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+service Assessment {
+    rpc create_course(stream CourseRequest) returns (stream google.protobuf.StringValue);
+    rpc assign_course(AssignRequest) returns (google.protobuf.BoolValue);
+    rpc create_user(stream UserRequest) returns (CreateUserResponse);
+
+    rpc submit_assignment(stream AssignmentRequest) returns (google.protobuf.BoolValue);
+    rpc register(stream Register) returns (google.protobuf.BoolValue);
+
+    rpc request_assignment(AssessorRequest) returns (stream Submission);
+    rpc submit_mark(Mark) returns (google.protobuf.BoolValue);
+    
+    rpc login(LoginRequest) returns (LoginResponse);
+}
+
+message AssessorRequest {
+    string courseCode = 1;
+    int32 assignmentID = 2;
+    string assessorCode = 3;
+}
+
+message LoginRequest {
+    string userID = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    bool success = 1;
+    Profiles profile = 2;
+}
+
+message Course {
+    string code = 1;
+    string name = 2;
+    repeated Assignment assignments = 3;
+    string assessor = 4;
+    repeated string students = 5;
+}
+
+
+message CourseRequest {
+    string courseCode = 1;
+    string name = 2;
+    repeated Assignment assignments = 3;
+}
+
+message Assignment {
+    int32 id = 1;
+    float weight = 2;
+}
+
+message Submission {
+    string studentID = 1;
+    string content = 2;
+    float mark = 3;
+    bool marked = 4;
+    string courseCode = 5;
+    int32 assignmentID = 6;
+}
+
+message AssignRequest {
+    string courseCode = 1;
+    string assessorCode = 2;
+}
+
+enum Profiles {
+    LEARNER = 0;
+    ADMINISTRATOR = 1;
+    ASSESSOR = 2;
+}
+
+message UserRequest {
+    string userCode = 1;
+    string name = 2;
+    Profiles profile = 3;
+    string password = 4;
+}
+
+message AssignmentRequest {
+    string courseCode = 1;
+    string studentID = 2;
+    string content = 3;
+    int32 assignmentID = 4;
+}
+
+message AssessorAssignments {
+    repeated AssignmentRequest Assignments = 1;
+}
+
+message Mark {
+    int32 assignmentID = 1;
+    float mark = 2;
+    string studentID = 3;
+    string courseID = 4;
+}
+
+message Register {
+    string userID = 1;
+    string courseID = 2;
+}
+
+message CreateUserData {
+    string userCode = 1;
+    string status = 2;
+}
+
+message CreateUserResponse {
+    repeated CreateUserData data = 1;
+}
